@@ -33,7 +33,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
-	
+
 	// set application config
 	var app application
 
