@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/1206yaya/go-movie-webapp-api-chi/internal/repository"
 	"github.com/1206yaya/go-movie-webapp-api-chi/internal/repository/dbrepo"
+	"github.com/joho/godotenv"
 )
 
 const port = 8080
@@ -22,9 +24,16 @@ type application struct {
 	JWTIssuer    string
 	JWTAudience  string
 	CookieDomain string
+	APIKey       string
 }
 
 func main() {
+	// Load .env file
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+	
 	// set application config
 	var app application
 
@@ -35,6 +44,10 @@ func main() {
 	flag.StringVar(&app.JWTAudience, "jwt-audience", "example.com", "signing audience")
 	flag.StringVar(&app.CookieDomain, "cookie-domain", "localhost", "cookie domain")
 	flag.StringVar(&app.Domain, "domain", "example.com", "domain")
+	app.APIKey = os.Getenv("TMDB_API_KEY")
+	if app.APIKey == "" {
+		log.Fatal("API key not found in environment")
+	}
 	flag.Parse()
 
 	// connect to the database
