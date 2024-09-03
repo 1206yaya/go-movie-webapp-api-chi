@@ -1,4 +1,5 @@
 .chatignore
+.env
 memo.md
 
 postgres-data
